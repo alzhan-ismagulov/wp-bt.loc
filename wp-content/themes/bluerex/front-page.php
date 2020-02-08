@@ -42,15 +42,22 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="blog.html">Blog</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Features</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Product</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Reviews</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Faq</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
-            </ul>
+            <?php
+            wp_nav_menu(array(
+                'theme_location' => 'header_menu',
+                'container' => false,
+                'menu_class' => 'navbar-nav ml-auto',
+            ))
+            ?>
+<!--            <ul class="navbar-nav ml-auto">-->
+<!--                <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>-->
+<!--                <li class="nav-item"><a class="nav-link" href="blog.html">Blog</a></li>-->
+<!--                <li class="nav-item"><a class="nav-link" href="#">Features</a></li>-->
+<!--                <li class="nav-item"><a class="nav-link" href="#">Product</a></li>-->
+<!--                <li class="nav-item"><a class="nav-link" href="#">Reviews</a></li>-->
+<!--                <li class="nav-item"><a class="nav-link" href="#">Faq</a></li>-->
+<!--                <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>-->
+<!--            </ul>-->
         </div>
     </nav>
 
