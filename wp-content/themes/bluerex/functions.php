@@ -1,10 +1,10 @@
 <?php
 /**
- * BlueRex functions and definitions
+ * bluerex functions and definitions
  *
  * @link https://developer.wordpress.org/themes/basics/theme-functions/
  *
- * @package BlueRex
+ * @package bluerex
  */
 
 if ( ! function_exists( 'bluerex_setup' ) ) :
@@ -19,7 +19,7 @@ if ( ! function_exists( 'bluerex_setup' ) ) :
 		/*
 		 * Make theme available for translation.
 		 * Translations can be filed in the /languages/ directory.
-		 * If you're building a theme based on BlueRex, use a find and replace
+		 * If you're building a theme based on bluerex, use a find and replace
 		 * to change 'bluerex' to the name of your theme in all the template files.
 		 */
 		load_theme_textdomain( 'bluerex', get_template_directory() . '/languages' );
@@ -120,27 +120,21 @@ add_action( 'widgets_init', 'bluerex_widgets_init' );
  * Enqueue scripts and styles.
  */
 function bluerex_scripts() {
-	wp_enqueue_style( 'bluerex-style', get_stylesheet_uri() );
-	wp_enqueue_style( 'bluerex-bootstrap-css', get_template_directory_uri() . '/assets/bootstrap/css/bootstrap.min.css' );
-	wp_enqueue_style( 'bluerex-fontawesome-css', 'https://use.fontawesome.com/realeses/v.5.6.3/css/all.css' );
-	wp_enqueue_style( 'bluerex-googlefonts', 'https://fonts.googleapis.com/css?family-Montserrat:300,400,600,700|Poppins:400,600,700&amp;subset=cyrillic' );
-	wp_enqueue_style( 'bluerex-baguetteBox-css', get_template_directory_uri() . '/assets/css/baguetteBox.min.css' );
-	wp_enqueue_style( 'bluerex-style-css', get_template_directory_uri() . '/assets/css/style.css' );
-	wp_deregister_script('jquery');
-	wp_register_script('jquery', get_template_directory_uri() . '/assets/js/jquery-3.3.1.min.js');
-	wp_enqueue_script('jquery');
-	wp_enqueue_script('bluerex-popper-js', get_template_directory_uri() . '/assets/js/popper.min.js', array(),'', true);
-	wp_enqueue_style( 'bluerex-bootstrap-js', get_template_directory_uri() . '/assets/bootstrap/js/bootstrap.min.js' );
-	wp_enqueue_style( 'bluerex-baguetteBox-js', get_template_directory_uri() . '/assets/js/baguetteBox.min.js' );
-	wp_enqueue_style( 'bluerex-main-js', get_template_directory_uri() . '/assets/js/main.js' );
+    wp_enqueue_style( 'bluerex-style', get_stylesheet_uri() );
+    wp_enqueue_style( 'bluerex-bootstrap-css', get_template_directory_uri() . '/assets/bootstrap/css/bootstrap.min.css' );
+    wp_enqueue_style( 'bluerex-fontawesome-css', 'https://use.fontawesome.com/releases/v5.6.3/css/all.css' );
+    wp_enqueue_style( 'bluerex-googlefonts', 'https://fonts.googleapis.com/css?family=Montserrat:300,400,600,700|Poppins:400,600,700&amp;subset=cyrillic' );
+    wp_enqueue_style( 'bluerex-baguetteBox-css', get_template_directory_uri() . '/assets/css/baguetteBox.min.css' );
+    wp_enqueue_style( 'bluerex-style-css', get_template_directory_uri() . '/assets/css/style.css' );
 
-	wp_enqueue_script( 'bluerex-navigation', get_template_directory_uri() . '/js/navigation.js', array(), '20151215', true );
+    wp_deregister_script( 'jquery' );
+    wp_register_script( 'jquery', get_template_directory_uri() . '/assets/js/jquery-3.3.1.min.js');
+    wp_enqueue_script( 'jquery' );
 
-	wp_enqueue_script( 'bluerex-skip-link-focus-fix', get_template_directory_uri() . '/js/skip-link-focus-fix.js', array(), '20151215', true );
-
-	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
-		wp_enqueue_script( 'comment-reply' );
-	}
+    wp_enqueue_script( 'bluerex-popper-js', get_template_directory_uri() . '/assets/js/popper.min.js', array(), '', true );
+    wp_enqueue_script( 'bluerex-bootstrap-js', get_template_directory_uri() . '/assets/bootstrap/js/bootstrap.min.js', array(), '', true );
+    wp_enqueue_script( 'bluerex-baguetteBox-js', get_template_directory_uri() . '/assets/js/baguetteBox.min.js', array(), '', true );
+    wp_enqueue_script( 'bluerex-main-js', get_template_directory_uri() . '/assets/js/main.js', array(), '', true );
 }
 add_action( 'wp_enqueue_scripts', 'bluerex_scripts' );
 
@@ -170,7 +164,16 @@ require get_template_directory() . '/inc/customizer.php';
 if ( defined( 'JETPACK__VERSION' ) ) {
 	require get_template_directory() . '/inc/jetpack.php';
 }
-//custom code
+
+// Custom code
 function bluerex_debug($data){
-	echo '<pre>' . print_r($data, 1) . '</pre>';
+    echo '<pre>' . print_r($data, 1) . '</pre>';
+}
+
+function bluerex_get_background($field, $cat = null, $cover = true){
+    if (get_field($field, $cat)){
+        $add_style = $cover ? 'background-size: cover' : '';
+        return 'style="background: url(' . get_field($field, $cat) . ') center no-repeat;' . $add_style .'"';
+    }
+    return null;
 }

@@ -28,13 +28,12 @@
 </div>-->
 
 <button class="scrollToTop"><i class="fas fa-angle-up"></i></button>
-
-<header class="main-header">
+<header class="main-header" <?php echo bluerex_get_background('header_bg') ?>>
     <nav class="navbar navbar-expand-lg">
         <a class="navbar-brand" href="<?php echo home_url('/') ?>">
-            <?php $custom_logo = wp_get_attachment_image_src(get_theme_mod('custom_logo')); if ($custom_logo): ?>
-            <img src="<?php echo $custom_logo[0] ?>" alt = "<?php bloginfo('name') ?>">
-            <?php endif; ?> 
+            <?php $custom_logo = wp_get_attachment_image_src( get_theme_mod('custom_logo') ); if($custom_logo): ?>
+                <img src="<?php echo $custom_logo[0] ?>" alt="<?php bloginfo('name') ?>">
+            <?php endif; ?>
             <?php bloginfo('name') ?>
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,31 +42,38 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <?php
-            wp_nav_menu(array(
+            wp_nav_menu( array(
                 'theme_location' => 'header_menu',
                 'container' => false,
                 'menu_class' => 'navbar-nav ml-auto',
-            ))
+            ) )
             ?>
-<!--            <ul class="navbar-nav ml-auto">-->
-<!--                <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>-->
-<!--                <li class="nav-item"><a class="nav-link" href="blog.html">Blog</a></li>-->
-<!--                <li class="nav-item"><a class="nav-link" href="#">Features</a></li>-->
-<!--                <li class="nav-item"><a class="nav-link" href="#">Product</a></li>-->
-<!--                <li class="nav-item"><a class="nav-link" href="#">Reviews</a></li>-->
-<!--                <li class="nav-item"><a class="nav-link" href="#">Faq</a></li>-->
-<!--                <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>-->
-<!--            </ul>-->
         </div>
     </nav>
 
     <div class="main-header-text">
-        <h3>We are best and creative agency</h3>
-        <h4>We turn creative ideas into your business</h4>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Suscipit doloribus non nam, velit nemo enim!</p>
+        <?php if(get_field('header1')): ?>
+            <h3><?php the_field('header1') ?></h3>
+        <?php endif; ?>
+        <?php if(get_field('header2')): ?>
+            <h4><?php the_field('header2') ?></h4>
+        <?php endif; ?>
+        <?php if(get_field('header_text')): ?>
+            <p><?php the_field('header_text') ?></p>
+        <?php endif; ?>
         <div class="main-header-buttons">
-            <button type="button" class="btn btn-pink rounded-pill">Our story</button>
-            <button type="button" class="btn btn-violet rounded-pill">Read more</button>
+            <?php
+            if(get_field('header_btn1')):
+            $link = get_field('header_btn1');
+            ?>
+            <a href="<?php echo esc_url($link['url']); ?>" class="btn btn-pink rounded-pill"><?php echo esc_html($link['title']); ?></a>
+            <?php endif; ?>
+            <?php
+            if(get_field('header_btn2')):
+            $link = get_field('header_btn2');
+            ?>
+            <a href="<?php echo esc_url($link['url']); ?>" class="btn btn-violet rounded-pill"><?php echo esc_html($link['title']); ?></a>
+            <?php endif; ?>
         </div>
     </div>
     <!-- /.main-header-text -->
