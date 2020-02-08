@@ -44,7 +44,7 @@ if ( ! function_exists( 'bluerex_setup' ) ) :
 
 		// This theme uses wp_nav_menu() in one location.
 		register_nav_menus( array(
-			'menu-1' => esc_html__( 'Primary', 'bluerex' ),
+			'header_menu' => esc_html__( 'Header menu', 'bluerex' ),
 		) );
 
 		/*
@@ -74,8 +74,8 @@ if ( ! function_exists( 'bluerex_setup' ) ) :
 		 * @link https://codex.wordpress.org/Theme_Logo
 		 */
 		add_theme_support( 'custom-logo', array(
-			'height'      => 250,
-			'width'       => 250,
+			'height'      => 69,
+			'width'       => 62,
 			'flex-width'  => true,
 			'flex-height' => true,
 		) );
@@ -121,6 +121,18 @@ add_action( 'widgets_init', 'bluerex_widgets_init' );
  */
 function bluerex_scripts() {
 	wp_enqueue_style( 'bluerex-style', get_stylesheet_uri() );
+	wp_enqueue_style( 'bluerex-bootstrap-css', get_template_directory_uri() . '/assets/bootstrap/css/bootstrap.min.css' );
+	wp_enqueue_style( 'bluerex-fontawesome-css', 'https://use.fontawesome.com/realeses/v.5.6.3/css/all.css' );
+	wp_enqueue_style( 'bluerex-googlefonts', 'https://fonts.googleapis.com/css?family-Montserrat:300,400,600,700|Poppins:400,600,700&amp;subset=cyrillic' );
+	wp_enqueue_style( 'bluerex-baguetteBox-css', get_template_directory_uri() . '/assets/css/baguetteBox.min.css' );
+	wp_enqueue_style( 'bluerex-style-css', get_template_directory_uri() . '/assets/css/style.css' );
+	wp_deregister_script('jquery');
+	wp_register_script('jquery', get_template_directory_uri() . '/assets/js/jquery-3.3.1.min.js');
+	wp_enqueue_script('jquery');
+	wp_enqueue_script('bluerex-popper-js', get_template_directory_uri() . '/assets/js/popper.min.js', array(),'', true);
+	wp_enqueue_style( 'bluerex-bootstrap-js', get_template_directory_uri() . '/assets/bootstrap/js/bootstrap.min.js' );
+	wp_enqueue_style( 'bluerex-baguetteBox-js', get_template_directory_uri() . '/assets/js/baguetteBox.min.js' );
+	wp_enqueue_style( 'bluerex-main-js', get_template_directory_uri() . '/assets/js/main.js' );
 
 	wp_enqueue_script( 'bluerex-navigation', get_template_directory_uri() . '/js/navigation.js', array(), '20151215', true );
 
@@ -158,4 +170,3 @@ require get_template_directory() . '/inc/customizer.php';
 if ( defined( 'JETPACK__VERSION' ) ) {
 	require get_template_directory() . '/inc/jetpack.php';
 }
-
