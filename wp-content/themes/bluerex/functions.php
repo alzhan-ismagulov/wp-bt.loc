@@ -170,3 +170,7 @@ require get_template_directory() . '/inc/customizer.php';
 if ( defined( 'JETPACK__VERSION' ) ) {
 	require get_template_directory() . '/inc/jetpack.php';
 }
+//custom code
+function bluerex_debug($data){
+	echo '<pre>' . print_r($data, 1) . '</pre>';
+}
