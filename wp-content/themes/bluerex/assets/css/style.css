@@ -124,8 +124,8 @@ h4{
 
 /* =============================.section-watch============================== */
 .section-watch{
-	background: url(../img/world_map.png) center no-repeat;
-	background-size: cover;
+	/*background: url(../img/world_map.png) center no-repeat;*/
+	/*background-size: cover;*/
 }
 .section-watch h3,
 .section-watch h4{

@@ -6,60 +6,70 @@ if ($design_cat):
         'numberposts' => 3,
         'category' => 3,
     ));
-    bluerex_debug($posts);
+//    bluerex_debug($posts);
     ?>
-    <section class="section-watch section-tabs">
+    <section class="section-watch section-tabs" <?php echo bluerex_get_background('section_img', $design_cat) ?>>
         <div class="container">
             <div class="row">
                 <div class="col-lg-6 mb-5">
-                    <h3>Dream Big Inspire the World</h3>
-                    <h4>We turn creative ideas into your business</h4>
+                    <?php if (get_field('section_header', $design_cat)): ?> <!--Проверка есть ли заголовок? -->
+                        <h3><?php the_field('section_header', $design_cat) ?></h3> <!-- Вывод Dream Big Inspire the World -->
+                    <?php endif; ?>
+                    <?php if ($design_cat->description): ?> <!--Проверка, есть ли описание категории? -->
+                        <h4><?php echo $design_cat->description ?></h4> <!--Вывод описания -->
+                    <?php endif; ?>
 
                     <ul class="nav nav-pills" id="myTab" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active rounded-pill" id="webdesign-tab" data-toggle="tab"
-                               href="#webdesign" role="tab" aria-controls="webdesign" aria-selected="true">Webdesign</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link rounded-pill" id="mobileapp-tab" data-toggle="tab" href="#mobileapp"
-                               role="tab" aria-controls="mobileapp" aria-selected="false">Mobile app</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link rounded-pill" id="branding-tab" data-toggle="tab" href="#branding"
-                               role="tab" aria-controls="branding" aria-selected="false">Branding</a>
-                        </li>
+                        <?php
+                        $data = [];
+                        $i = 0;
+                        foreach ($posts as $post):
+                            setup_postdata($post);
+                            $data[$i]['post_name'] = $post->post_name;
+                            $data[$i]['url'] = get_the_permalink();
+                            $data[$i]['content'] = get_the_content('');
+                            ?>
+                            <li class="nav-item">
+                                <a class="nav-link rounded-pill <?php if (!$i) echo 'active' ?>"
+                                   id="<?php echo $post->post_name ?>-tab"
+                                   data-toggle="tab"
+                                   href="#<?php echo $post->post_name ?>"
+                                   role="tab"
+                                   aria-controls="webdesign"
+                                   aria-selected="true"><?php the_title() ?></a>
+                            </li>
+                            <?php
+                            $i++;
+                        endforeach;
+                        ?>
                     </ul>
                     <div class="tab-content" id="myTabContent">
-                        <div class="tab-pane fade show active" id="webdesign" role="tabpanel"
-                             aria-labelledby="webdesign-tab">
-                            <p>Webdesign Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur obcaecati
-                                vero aliquid libero doloribus ad, unde tempora maiores, ullam, modi qui quidem minima
-                                debitis perferendis vitae cumque et quo impedit.</p>
-                            <p><a href="#" class="btn btn-pink btn-shadow">Read more</a></p>
-                        </div>
-                        <div class="tab-pane fade" id="mobileapp" role="tabpanel" aria-labelledby="mobileapp-tab">
-                            <p>Mobile app Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur obcaecati
-                                vero aliquid libero doloribus ad, unde tempora maiores, ullam, modi qui quidem minima
-                                debitis perferendis vitae cumque et quo impedit.</p>
-                            <p><a href="#" class="btn btn-pink btn-shadow">Read more</a></p>
-                        </div>
-                        <div class="tab-pane fade" id="branding" role="tabpanel" aria-labelledby="branding-tab">
-                            <p>Branding Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur obcaecati
-                                vero aliquid libero doloribus ad, unde tempora maiores, ullam, modi qui quidem minima
-                                debitis perferendis vitae cumque et quo impedit.</p>
-                            <p><a href="#" class="btn btn-pink btn-shadow">Read more</a></p>
-                        </div>
+                        <?php
+                        foreach ($data as $k => $item):
+                            ?>
+                            <div class="tab-pane fade show <?php if (!$k) echo 'active' ?>"
+                                 id="<?php echo $item['post_name'] ?>" role="tabpanel"
+                                 aria-labelledby="<?php echo $item['post_name'] ?>-tab">
+                                <?php echo $item['content'] ?>
+                                <p><a href="<?php echo $item['url'] ?>"
+                                      class="btn btn-pink btn-shadow"><?php echo __('Read more', 'bluerex') ?></a></p>
+                            </div>
+                        <?php endforeach; ?>
                     </div>
 
                 </div>
                 <!-- /.col-md-6 -->
 
                 <div class="col-lg-6 text-center">
-                    <img src="<?php bloginfo('template_url') ?>/assets/img/watch.png" alt="">
+                    <?php if (get_field('section_add_img', $design_cat)): ?>
+                        <img src="<?php echo get_field('section_add_img', $design_cat) ?>" alt="">
+                    <?php endif; ?>
                 </div>
                 <!-- /.col-md-6 -->
             </div>
         </div>
+        <?php wp_reset_postdata();
+        unset($data, $posts); ?>
     </section>
     <!-- /.section-watch -->
 <?php endif; ?>
@@ -71,8 +81,10 @@ if ($design_cat):
                     <div><i class="fas fa-bullhorn"></i></div>
                     <div class="num">500+</div>
                     <h4><span>Successfully</span> completed projects</h4>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore aspernatur quas voluptatibus
-                        sed dolor optio architecto, praesentium ullam dolorum alias soluta deserunt quod quidem quaerat
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore aspernatur quas
+                        voluptatibus
+                        sed dolor optio architecto, praesentium ullam dolorum alias soluta deserunt quod quidem
+                        quaerat
                         officiis ipsa quae, magnam esse?</p>
                 </div>
                 <!-- /.col-md-4 progress-item -->
@@ -80,8 +92,10 @@ if ($design_cat):
                     <div><i class="fas fa-bullhorn"></i></div>
                     <div class="num">254+</div>
                     <h4><span>Highly</span> specialised employees</h4>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore aspernatur quas voluptatibus
-                        sed dolor optio architecto, praesentium ullam dolorum alias soluta deserunt quod quidem quaerat
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore aspernatur quas
+                        voluptatibus
+                        sed dolor optio architecto, praesentium ullam dolorum alias soluta deserunt quod quidem
+                        quaerat
                         officiis ipsa quae, magnam esse?</p>
                 </div>
                 <!-- /.col-md-4 progress-item -->
@@ -89,8 +103,10 @@ if ($design_cat):
                     <div><i class="fas fa-bullhorn"></i></div>
                     <div class="num">45+</div>
                     <h4><span>Awards</span> around the world</h4>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore aspernatur quas voluptatibus
-                        sed dolor optio architecto, praesentium ullam dolorum alias soluta deserunt quod quidem quaerat
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore aspernatur quas
+                        voluptatibus
+                        sed dolor optio architecto, praesentium ullam dolorum alias soluta deserunt quod quidem
+                        quaerat
                         officiis ipsa quae, magnam esse?</p>
                 </div>
                 <!-- /.col-md-4 progress-item -->
@@ -106,7 +122,8 @@ if ($design_cat):
                     <h3>Let's Grow Together</h3>
                     <h4>We turn creative ideas into your business</h4>
                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nihil ipsa voluptas delectus sed,
-                        assumenda voluptates ab adipisci perspiciatis earum magnam fugit quasi culpa, repellendus totam
+                        assumenda voluptates ab adipisci perspiciatis earum magnam fugit quasi culpa, repellendus
+                        totam
                         in unde neque sapiente quod.</p>
                     <p><a href="#" class="btn btn-pink btn-shadow">Read more</a></p>
                 </div>
@@ -128,7 +145,8 @@ if ($design_cat):
                         <div class="col-md-6 mb-3">
                             <span><i class="far fa-comments"></i></span>
                             <h2>Graphic Design</h2>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugit, amet totam modi optio, a
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugit, amet totam modi
+                                optio, a
                                 quae.</p>
                             <p><a href="#" class="btn btn-pink btn-shadow">Read more</a></p>
                         </div>
@@ -136,7 +154,8 @@ if ($design_cat):
                         <div class="col-md-6 mb-3">
                             <span><i class="fas fa-bullhorn"></i></span>
                             <h2>Graphic Design</h2>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugit, amet totam modi optio, a
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugit, amet totam modi
+                                optio, a
                                 quae.</p>
                             <p><a href="#" class="btn btn-pink btn-shadow">Read more</a></p>
                         </div>
@@ -165,7 +184,8 @@ if ($design_cat):
                 <div class="col-md-8 offset-md-2 text-center">
                     <h4>Our Recent Work</h4>
                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Obcaecati ipsum cumque, sit earum
-                        quasi, nisi repudiandae perspiciatis culpa praesentium cupiditate, distinctio maiores mollitia.
+                        quasi, nisi repudiandae perspiciatis culpa praesentium cupiditate, distinctio maiores
+                        mollitia.
                         Similique quidem, harum aliquam consectetur qui ut.</p>
                 </div>
                 <!-- /.col-md-8 -->
@@ -178,7 +198,8 @@ if ($design_cat):
                                aria-selected="true">Webdesign</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link rounded-pill" id="mobileapp-tab2" data-toggle="tab" href="#mobileapp2"
+                            <a class="nav-link rounded-pill" id="mobileapp-tab2" data-toggle="tab"
+                               href="#mobileapp2"
                                role="tab" aria-controls="mobileapp2" aria-selected="false">Mobile app</a>
                         </li>
                         <li class="nav-item">
@@ -192,47 +213,56 @@ if ($design_cat):
                             <div class="gallery text-center row">
                                 <div class="col-sm-4 gallery-item">
                                     <a href="img/gallery/1.jpg">
-                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/1_s.jpg" alt="">
+                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/1_s.jpg"
+                                             alt="">
                                     </a>
                                 </div>
                                 <div class="col-sm-4 gallery-item">
                                     <a href="img/gallery/2.jpg">
-                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/2_s.jpg" alt="">
+                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/2_s.jpg"
+                                             alt="">
                                     </a>
                                 </div>
                                 <div class="col-sm-4 gallery-item">
                                     <a href="img/gallery/3.jpg">
-                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/3_s.jpg" alt="">
+                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/3_s.jpg"
+                                             alt="">
                                     </a>
                                 </div>
                                 <div class="col-sm-4 gallery-item">
                                     <a href="img/gallery/4.jpg">
-                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/4_s.jpg" alt="">
+                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/4_s.jpg"
+                                             alt="">
                                     </a>
                                 </div>
                                 <div class="col-sm-4 gallery-item">
                                     <a href="img/gallery/5.jpg">
-                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/5_s.jpg" alt="">
+                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/5_s.jpg"
+                                             alt="">
                                     </a>
                                 </div>
                                 <div class="col-sm-4 gallery-item">
                                     <a href="img/gallery/6.jpg">
-                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/6_s.jpg" alt="">
+                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/6_s.jpg"
+                                             alt="">
                                     </a>
                                 </div>
                                 <div class="col-sm-4 gallery-item">
                                     <a href="img/gallery/7.jpg">
-                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/7_s.jpg" alt="">
+                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/7_s.jpg"
+                                             alt="">
                                     </a>
                                 </div>
                                 <div class="col-sm-4 gallery-item">
                                     <a href="img/gallery/8.jpg">
-                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/8_s.jpg" alt="">
+                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/8_s.jpg"
+                                             alt="">
                                     </a>
                                 </div>
                                 <div class="col-sm-4 gallery-item">
                                     <a href="img/gallery/9.jpg">
-                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/9_s.jpg" alt="">
+                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/9_s.jpg"
+                                             alt="">
                                     </a>
                                 </div>
                             </div>
@@ -242,47 +272,56 @@ if ($design_cat):
                             <div class="gallery text-center row">
                                 <div class="col-sm-4 gallery-item">
                                     <a href="img/gallery/4.jpg">
-                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/4_s.jpg" alt="">
+                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/4_s.jpg"
+                                             alt="">
                                     </a>
                                 </div>
                                 <div class="col-sm-4 gallery-item">
                                     <a href="img/gallery/5.jpg">
-                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/5_s.jpg" alt="">
+                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/5_s.jpg"
+                                             alt="">
                                     </a>
                                 </div>
                                 <div class="col-sm-4 gallery-item">
                                     <a href="img/gallery/6.jpg">
-                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/6_s.jpg" alt="">
+                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/6_s.jpg"
+                                             alt="">
                                     </a>
                                 </div>
                                 <div class="col-sm-4 gallery-item">
                                     <a href="img/gallery/1.jpg">
-                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/1_s.jpg" alt="">
+                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/1_s.jpg"
+                                             alt="">
                                     </a>
                                 </div>
                                 <div class="col-sm-4 gallery-item">
                                     <a href="img/gallery/2.jpg">
-                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/2_s.jpg" alt="">
+                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/2_s.jpg"
+                                             alt="">
                                     </a>
                                 </div>
                                 <div class="col-sm-4 gallery-item">
                                     <a href="img/gallery/3.jpg">
-                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/3_s.jpg" alt="">
+                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/3_s.jpg"
+                                             alt="">
                                     </a>
                                 </div>
                                 <div class="col-sm-4 gallery-item">
                                     <a href="img/gallery/7.jpg">
-                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/7_s.jpg" alt="">
+                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/7_s.jpg"
+                                             alt="">
                                     </a>
                                 </div>
                                 <div class="col-sm-4 gallery-item">
                                     <a href="img/gallery/8.jpg">
-                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/8_s.jpg" alt="">
+                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/8_s.jpg"
+                                             alt="">
                                     </a>
                                 </div>
                                 <div class="col-sm-4 gallery-item">
                                     <a href="img/gallery/9.jpg">
-                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/9_s.jpg" alt="">
+                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/9_s.jpg"
+                                             alt="">
                                     </a>
                                 </div>
                             </div>
@@ -292,47 +331,56 @@ if ($design_cat):
                             <div class="gallery text-center row">
                                 <div class="col-sm-4 gallery-item">
                                     <a href="img/gallery/7.jpg">
-                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/7_s.jpg" alt="">
+                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/7_s.jpg"
+                                             alt="">
                                     </a>
                                 </div>
                                 <div class="col-sm-4 gallery-item">
                                     <a href="img/gallery/8.jpg">
-                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/8_s.jpg" alt="">
+                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/8_s.jpg"
+                                             alt="">
                                     </a>
                                 </div>
                                 <div class="col-sm-4 gallery-item">
                                     <a href="img/gallery/9.jpg">
-                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/9_s.jpg" alt="">
+                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/9_s.jpg"
+                                             alt="">
                                     </a>
                                 </div>
                                 <div class="col-sm-4 gallery-item">
                                     <a href="img/gallery/1.jpg">
-                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/1_s.jpg" alt="">
+                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/1_s.jpg"
+                                             alt="">
                                     </a>
                                 </div>
                                 <div class="col-sm-4 gallery-item">
                                     <a href="img/gallery/2.jpg">
-                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/2_s.jpg" alt="">
+                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/2_s.jpg"
+                                             alt="">
                                     </a>
                                 </div>
                                 <div class="col-sm-4 gallery-item">
                                     <a href="img/gallery/3.jpg">
-                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/3_s.jpg" alt="">
+                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/3_s.jpg"
+                                             alt="">
                                     </a>
                                 </div>
                                 <div class="col-sm-4 gallery-item">
                                     <a href="img/gallery/4.jpg">
-                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/4_s.jpg" alt="">
+                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/4_s.jpg"
+                                             alt="">
                                     </a>
                                 </div>
                                 <div class="col-sm-4 gallery-item">
                                     <a href="img/gallery/5.jpg">
-                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/5_s.jpg" alt="">
+                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/5_s.jpg"
+                                             alt="">
                                     </a>
                                 </div>
                                 <div class="col-sm-4 gallery-item">
                                     <a href="img/gallery/6.jpg">
-                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/6_s.jpg" alt="">
+                                        <img src="<?php bloginfo('template_url') ?>/assets/img/gallery/6_s.jpg"
+                                             alt="">
                                     </a>
                                 </div>
                             </div>
@@ -362,7 +410,8 @@ if ($design_cat):
                                     <h3>Our Happy Client</h3>
                                     <h4>Testimonials</h4>
                                     <blockquote class="blockquote">
-                                        <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
+                                        <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                            Integer
                                             posuere erat a ante.</p>
                                         <footer class="blockquote-footer">Mr. John Doe</footer>
                                     </blockquote>
@@ -384,7 +433,8 @@ if ($design_cat):
                                     <h3>Our Happy Client</h3>
                                     <h4>Testimonials</h4>
                                     <blockquote class="blockquote">
-                                        <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
+                                        <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                            Integer
                                             posuere erat a ante.</p>
                                         <footer class="blockquote-footer">Mr. Jack</footer>
                                     </blockquote>
@@ -406,7 +456,8 @@ if ($design_cat):
                                     <h3>Our Happy Client</h3>
                                     <h4>Testimonials</h4>
                                     <blockquote class="blockquote">
-                                        <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
+                                        <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                            Integer
                                             posuere erat a ante.</p>
                                         <footer class="blockquote-footer">Mr. David</footer>
                                     </blockquote>
@@ -439,8 +490,10 @@ if ($design_cat):
                 <div class="col-md-12">
                     <h4>Need Help?</h4>
                     <h5>Don't Forget to Contact With Us</h5>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente iusto modi illo quasi maiores
-                        iure expedita vel quo, magnam quia temporibus consectetur unde, repellendus odit culpa rerum.
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente iusto modi illo quasi
+                        maiores
+                        iure expedita vel quo, magnam quia temporibus consectetur unde, repellendus odit culpa
+                        rerum.
                         Suscipit, nihil, provident!</p>
 
                     <form class="text-left">
