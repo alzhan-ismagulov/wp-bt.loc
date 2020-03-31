@@ -6,7 +6,6 @@ if ($design_cat):
         'numberposts' => 3,
         'category' => 3,
     ));
-//    bluerex_debug($posts);
     ?>
     <section class="section-watch section-tabs" <?php echo bluerex_get_background('section_img', $design_cat) ?>>
         <div class="container">
@@ -72,48 +71,30 @@ if ($design_cat):
         unset($data, $posts); ?>
     </section>
     <!-- /.section-watch -->
-<?php endif; ?>
+<?php endif; //$design_cat ?>
 
+<?php
+$posts = get_posts(array(
+    'numberposts' => 3,
+    'category' => 4,
+));
+if ($posts):
+    ?>
     <section class="section-progress text-center">
         <div class="container">
             <div class="row">
-                <div class="col-md-4 progress-item">
-                    <div><i class="fas fa-bullhorn"></i></div>
-                    <div class="num">500+</div>
-                    <h4><span>Successfully</span> completed projects</h4>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore aspernatur quas
-                        voluptatibus
-                        sed dolor optio architecto, praesentium ullam dolorum alias soluta deserunt quod quidem
-                        quaerat
-                        officiis ipsa quae, magnam esse?</p>
-                </div>
-                <!-- /.col-md-4 progress-item -->
-                <div class="col-md-4 progress-item">
-                    <div><i class="fas fa-bullhorn"></i></div>
-                    <div class="num">254+</div>
-                    <h4><span>Highly</span> specialised employees</h4>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore aspernatur quas
-                        voluptatibus
-                        sed dolor optio architecto, praesentium ullam dolorum alias soluta deserunt quod quidem
-                        quaerat
-                        officiis ipsa quae, magnam esse?</p>
-                </div>
-                <!-- /.col-md-4 progress-item -->
-                <div class="col-md-4 progress-item">
-                    <div><i class="fas fa-bullhorn"></i></div>
-                    <div class="num">45+</div>
-                    <h4><span>Awards</span> around the world</h4>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore aspernatur quas
-                        voluptatibus
-                        sed dolor optio architecto, praesentium ullam dolorum alias soluta deserunt quod quidem
-                        quaerat
-                        officiis ipsa quae, magnam esse?</p>
-                </div>
-                <!-- /.col-md-4 progress-item -->
+                <?php foreach ($posts as $post): ?>
+                    <div class="col-md-4 progress-item">
+                        <?php echo $post->post_content; ?>
+                    </div>
+                    <!-- /.col-md-4 progress-item -->
+                <?php endforeach; ?>
             </div>
         </div>
+        <?php unset($posts); ?>
     </section>
     <!-- /.section-progress -->
+<?php endif; //$progress_cat ?>
 
     <section class="section-lets text-center">
         <div class="container">
