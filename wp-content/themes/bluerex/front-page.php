@@ -67,8 +67,7 @@ if ($design_cat):
                 <!-- /.col-md-6 -->
             </div>
         </div>
-        <?php wp_reset_postdata();
-        unset($data, $posts); ?>
+        <?php wp_reset_postdata(); unset($data, $posts); ?>
     </section>
     <!-- /.section-watch -->
 <?php endif; //$design_cat ?>
@@ -169,6 +168,7 @@ if ($graphic_cat):
                 <!-- /.col-lg-6 -->
             </div>
         </div>
+        <?php wp_reset_postdata(); unset($posts); ?>
     </section>
     <!-- /.section-design -->
 <?php endif; //$graphic_cat ?>
