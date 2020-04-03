@@ -20,17 +20,18 @@
 </head>
 <body>
 
-<!--<div class="preloader d-flex justify-content-center align-items-center">
-    <div class="spinner-border text-danger" style="width: 10rem; height: 10rem;" role="status">
-        <span class="sr-only">Loading...</span>
-    </div>
-</div>-->
+<!--<div class="preloader d-flex justify-content-center align-items-center">-->
+<!--    <div class="spinner-border text-danger" style="width: 10rem; height: 10rem;" role="status">-->
+<!--        <span class="sr-only">Loading...</span>-->
+<!--    </div>-->
+<!--</div>-->
 
 <button class="scrollToTop"><i class="fas fa-angle-up"></i></button>
 <header class="main-header" <?php echo bluerex_get_background('header_bg') ?>>
     <nav class="navbar navbar-expand-lg">
         <a class="navbar-brand" href="<?php echo home_url('/') ?>">
-            <?php $custom_logo = wp_get_attachment_image_src( get_theme_mod('custom_logo') ); if($custom_logo): ?>
+            <?php $custom_logo = wp_get_attachment_image_src( get_theme_mod('custom_logo') );
+            if($custom_logo): ?>
                 <img src="<?php echo $custom_logo[0] ?>" alt="<?php bloginfo('name') ?>">
             <?php endif; ?>
             <?php bloginfo('name') ?>
