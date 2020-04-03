@@ -248,9 +248,7 @@ if ($work_cat):
                                     <h3>Our Happy Client</h3>
                                     <h4>Testimonials</h4>
                                     <blockquote class="blockquote">
-                                        <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                            Integer
-                                            posuere erat a ante.</p>
+                                        <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
                                         <footer class="blockquote-footer">Mr. John Doe</footer>
                                     </blockquote>
                                 </div>
@@ -271,9 +269,7 @@ if ($work_cat):
                                     <h3>Our Happy Client</h3>
                                     <h4>Testimonials</h4>
                                     <blockquote class="blockquote">
-                                        <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                            Integer
-                                            posuere erat a ante.</p>
+                                        <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
                                         <footer class="blockquote-footer">Mr. Jack</footer>
                                     </blockquote>
                                 </div>
@@ -294,9 +290,7 @@ if ($work_cat):
                                     <h3>Our Happy Client</h3>
                                     <h4>Testimonials</h4>
                                     <blockquote class="blockquote">
-                                        <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                            Integer
-                                            posuere erat a ante.</p>
+                                        <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
                                         <footer class="blockquote-footer">Mr. David</footer>
                                     </blockquote>
                                 </div>
