@@ -4,7 +4,7 @@
 if ($design_cat):
     $posts = get_posts(array(
         'numberposts' => 3,
-    'category' => 3,
+        'category' => 3,
     ));
     ?>
     <section class="section-watch section-tabs" <?php echo bluerex_get_background('section_img', $design_cat) ?>>
@@ -66,7 +66,8 @@ if ($design_cat):
                 <!-- /.col-md-6 -->
             </div>
         </div>
-        <?php wp_reset_postdata(); unset($data, $posts); ?>
+        <?php wp_reset_postdata();
+        unset($data, $posts); ?>
     </section>
     <!-- /.section-watch -->
 <?php endif; //$design_cat ?>
@@ -167,7 +168,8 @@ if ($graphic_cat):
                 <!-- /.col-lg-6 -->
             </div>
         </div>
-        <?php wp_reset_postdata(); unset($posts); ?>
+        <?php wp_reset_postdata();
+        unset($posts); ?>
     </section>
     <!-- /.section-design -->
 <?php endif; //$graphic_cat ?>
@@ -176,7 +178,7 @@ if ($graphic_cat):
 if ($work_cat):
     $posts = get_posts(array(
         'numberposts' => 3,
-    'category' => 7,
+        'category' => 7,
     ));
     ?>
     <section class="section-work section-tabs">
@@ -232,77 +234,54 @@ if ($work_cat):
     <!-- /.section-work -->
 <?php endif; //$work_cat ?>
 
+<?php $posts = get_posts(array(
+    'post_type' => 'reviews',
+));
+if ($posts):
+    ?>
     <section class="section-reviews">
         <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
             <ol class="carousel-indicators">
-                <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-                <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-                <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                <?php for ($i = 0; $i < count($posts); $i++): ?>
+                    <li data-target="#carouselExampleIndicators"
+                        data-slide-to="<?php echo $i ?>" <?php if (!$i) echo 'class="active"' ?>></li>
+                <?php endfor; ?>
             </ol>
             <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-sm-7">
-                                <div class="carousel-caption">
-                                    <h3>Our Happy Client</h3>
-                                    <h4>Testimonials</h4>
-                                    <blockquote class="blockquote">
-                                        <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-                                        <footer class="blockquote-footer">Mr. John Doe</footer>
-                                    </blockquote>
+                <?php $i = 0;
+                foreach ($posts as $post): ?>
+                    <div class="carousel-item <?php if (!$i) echo 'active' ?>">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-sm-7">
+                                    <div class="carousel-caption">
+                                        <?php if ($post->post_title): ?>
+                                            <h3><?php echo $post->post_title ?></h3>
+                                        <?php endif; ?>
+                                        <?php if (the_field('review_header')): ?>
+                                            <h4><?php echo the_field('review_header') ?></h4>
+                                        <?php endif; ?>
+                                        <blockquote class="blockquote">
+                                            <?php if ($post->post_content): ?>
+                                                <p class="mb-0"><?php echo $post->post_content ?></p>
+                                            <?php endif; ?>
+                                            <?php if (the_field('review_author')): ?>
+                                                <footer class="blockquote-footer"><?php echo the_field('review_author') ?></footer>
+                                            <?php endif; ?>
+                                        </blockquote>
+                                    </div>
                                 </div>
+                                <!-- /.col-sm-7 -->
+                                <div class="col-sm-5 d-none d-sm-block">
+                                    <?php if (has_post_thumbnail($post->ID)): ?>
+                                        <?php echo get_the_post_thumbnail($post->ID) ?>
+                                    <?php endif; ?>
+                                </div>
+                                <!-- /.col-sm-5 -->
                             </div>
-                            <!-- /.col-sm-7 -->
-                            <div class="col-sm-5 d-none d-sm-block">
-                                <img src="<?php bloginfo('template_url') ?>/assets/img/client.png" alt="">
-                            </div>
-                            <!-- /.col-sm-5 -->
                         </div>
                     </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-sm-7">
-                                <div class="carousel-caption">
-                                    <h3>Our Happy Client</h3>
-                                    <h4>Testimonials</h4>
-                                    <blockquote class="blockquote">
-                                        <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-                                        <footer class="blockquote-footer">Mr. Jack</footer>
-                                    </blockquote>
-                                </div>
-                            </div>
-                            <!-- /.col-sm-7 -->
-                            <div class="col-sm-5 d-none d-sm-block">
-                                <img src="<?php bloginfo('template_url') ?>/assets/img/client.png" alt="">
-                            </div>
-                            <!-- /.col-sm-5 -->
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-sm-7">
-                                <div class="carousel-caption">
-                                    <h3>Our Happy Client</h3>
-                                    <h4>Testimonials</h4>
-                                    <blockquote class="blockquote">
-                                        <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-                                        <footer class="blockquote-footer">Mr. David</footer>
-                                    </blockquote>
-                                </div>
-                            </div>
-                            <!-- /.col-sm-7 -->
-                            <div class="col-sm-5 d-none d-sm-block">
-                                <img src="<?php bloginfo('template_url') ?>/assets/img/client.png" alt="">
-                            </div>
-                            <!-- /.col-sm-5 -->
-                        </div>
-                    </div>
-                </div>
+                    <?php $i++; endforeach; ?>
             </div>
             <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -314,6 +293,7 @@ if ($work_cat):
             </a>
         </div>
     </section>
+<?php endif; //$reviews ?>
     <!-- /.section-reviews -->
 
     <section class="section-form text-center">
