@@ -133,7 +133,13 @@ span.wpcf7-not-valid-tip {
 .btn-violet {
   background-color: #69328e;
 }
-
+.navbar-dark .navbar-nav .menu-item a {
+  color: rgba(255, 255, 255, 0.5);
+}
+.navbar-dark .navbar-nav .menu-item a:focus,
+.navbar-dark .navbar-nav .menu-item a:hover {
+  color: rgba(255, 255, 255, 0.75);
+}
 /* =============================.section-watch============================== */
 .section-watch {
   /*background: url(../img/world_map.png) center no-repeat;*/
