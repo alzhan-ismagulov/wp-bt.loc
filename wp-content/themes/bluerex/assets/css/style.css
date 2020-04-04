@@ -504,6 +504,33 @@ span.wpcf7-not-valid-tip {
   background-color: #da1757;
   border-color: #da1757;
 }
+ul.page-numbers {
+  list-style: none;
+  display: flex;
+}
+ul.page-numbers a.page-numbers,
+ul.page-numbers span {
+  color: #da1757;
+  transition: all 0.5s;
+  padding: 0.5rem 1rem;
+  position: relative;
+  display: block;
+  margin-left: -1px;
+  line-height: 1.25;
+  background-color: #fff;
+  border: 1px solid #dee2e6;
+}
+ul.page-numbers span.current {
+  background-color: #da1757;
+  border-color: #da1757;
+  color: #fff;
+}
+ul.page-numbers a.page-numbers:hover {
+  background-color: #f42267;
+  color: #fff;
+  border-color: #f42267;
+  text-decoration: none;
+}
 
 /* Large Devices, Wide Screens */
 @media only screen and (max-width: 1200px) {
