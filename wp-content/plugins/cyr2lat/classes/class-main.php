@@ -32,6 +32,27 @@ class Main {
 	protected $settings;
 
 	/**
+	 * Process posts instance.
+	 *
+	 * @var Post_Conversion_Process
+	 */
+	protected $process_all_posts;
+
+	/**
+	 * Process terms instance.
+	 *
+	 * @var Term_Conversion_Process
+	 */
+	protected $process_all_terms;
+
+	/**
+	 * Admin Notices instance.
+	 *
+	 * @var Admin_Notices
+	 */
+	protected $admin_notices;
+
+	/**
 	 * Converter instance.
 	 *
 	 * @var Converter
@@ -54,34 +75,25 @@ class Main {
 
 	/**
 	 * Main constructor.
-	 *
-	 * @param Settings  $settings  Plugin settings.
-	 * @param Converter $converter Converter instance.
-	 * @param WP_CLI    $cli       CLI instance.
-	 * @param ACF       $acf       ACF instance.
 	 */
-	public function __construct( $settings = null, $converter = null, $cli = null, $acf = null ) {
-		$this->settings = $settings;
-		if ( ! $this->settings ) {
-			$this->settings = new Settings();
+	public function __construct() {
+		$this->settings          = new Settings();
+		$this->process_all_posts = new Post_Conversion_Process( $this );
+		$this->process_all_terms = new Term_Conversion_Process( $this );
+		$this->admin_notices     = new Admin_Notices();
+		$this->converter         = new Converter(
+			$this,
+			$this->settings,
+			$this->process_all_posts,
+			$this->process_all_terms,
+			$this->admin_notices
+		);
+
+		if ( defined( 'WP_CLI' ) && constant( 'WP_CLI' ) ) {
+			$this->cli = new WP_CLI( $this->converter );
 		}
 
-		$this->converter = $converter;
-		if ( ! $this->converter ) {
-			$this->converter = new Converter( $this, $this->settings );
-		}
-
-		$this->cli = $cli;
-		if ( defined( 'WP_CLI' ) && WP_CLI ) {
-			if ( ! $this->cli ) {
-				$this->cli = new WP_CLI( $this->converter );
-			}
-		}
-
-		$this->acf = $acf;
-		if ( ! $this->acf ) {
-			$this->acf = new ACF( $this->settings );
-		}
+		$this->acf = new ACF( $this->settings );
 
 		$this->init();
 	}
@@ -90,7 +102,7 @@ class Main {
 	 * Init class.
 	 */
 	public function init() {
-		if ( defined( 'WP_CLI' ) && WP_CLI ) {
+		if ( defined( 'WP_CLI' ) && constant( 'WP_CLI' ) ) {
 			try {
 				/**
 				 * Method WP_CLI::add_command() accepts class as callable.
@@ -161,10 +173,33 @@ class Main {
 		if ( ! empty( $term ) ) {
 			$title = $term;
 		} else {
-			$title = $this->transliterate( $title );
+			$title = $this->is_wc_attribute_taxonomy( $title ) ? $title : $this->transliterate( $title );
 		}
 
 		return $title;
+	}
+
+	/**
+	 * Check if title is an attribute taxonomy.
+	 *
+	 * @param string $title Title.
+	 *
+	 * @return bool
+	 */
+	protected function is_wc_attribute_taxonomy( $title ) {
+		if ( ! function_exists( 'wc_get_attribute_taxonomies' ) ) {
+			return false;
+		}
+
+		$attribute_taxonomies = wc_get_attribute_taxonomies();
+
+		foreach ( $attribute_taxonomies as $attribute_taxonomy ) {
+			if ( $title === $attribute_taxonomy->attribute_name ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
@@ -183,7 +218,7 @@ class Main {
 		}
 
 		if ( seems_utf8( $filename ) ) {
-			$filename = Mbstring::mb_strtolower( $filename );
+			$filename = mb_strtolower( $filename );
 		}
 
 		return $this->transliterate( $filename );
@@ -219,7 +254,7 @@ class Main {
 	 * @return string
 	 */
 	protected function split_chinese_string( $string, $table ) {
-		if ( ! $this->settings->is_chinese_locale() || Mbstring::mb_strlen( $string ) < 4 ) {
+		if ( ! $this->settings->is_chinese_locale() || mb_strlen( $string ) < 4 ) {
 			return $string;
 		}
 
@@ -253,7 +288,7 @@ class Main {
 	 *
 	 * @return string
 	 */
-	private function transliterate( $string ) {
+	public function transliterate( $string ) {
 		$table = $this->get_filtered_table();
 
 		$string = $this->fix_mac_string( $string );
@@ -278,11 +313,6 @@ class Main {
 	private function ctl_is_classic_editor_plugin_active() {
 		if ( ! function_exists( 'is_plugin_active' ) ) {
 			// @codeCoverageIgnoreStart
-			/**
-			 * Do not inspect include path.
-			 *
-			 * @noinspection PhpIncludeInspection
-			 */
 			include_once ABSPATH . 'wp-admin/includes/plugin.php';
 			// @codeCoverageIgnoreEnd
 		}
@@ -329,14 +359,7 @@ class Main {
 	 * @return mixed
 	 */
 	public function ctl_sanitize_post_name( $data, $postarr = [] ) {
-		global $current_screen;
-
 		if ( ! $this->ctl_is_gutenberg_editor_active() ) {
-			return $data;
-		}
-
-		// Run code only on post edit screen.
-		if ( ! ( $current_screen && 'post' === $current_screen->base ) ) {
 			return $data;
 		}
 

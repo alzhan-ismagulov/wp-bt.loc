@@ -209,6 +209,7 @@ function bluerex_get_background($field, $cat = null, $cover = true)
 }
 
 add_action('init', 'bluerex_reviews');
+
 function bluerex_reviews()
 {
     register_post_type('reviews', array(
@@ -230,6 +231,7 @@ function bluerex_reviews()
     ));
 }
 add_filter('navigation_markup_template', 'bluerex_navigation_template', 10, 2);
+
 function bluerex_navigation_template($template, $class)
 {
     return '
@@ -238,3 +240,12 @@ function bluerex_navigation_template($template, $class)
 	</nav>    
 	';
 }
+
+function exclude_category($query)
+{
+    if ($query->is_home) {
+        $query->set('category__not_in', array(4, 7));
+    }
+    return $query;
+}
+add_filter('pre_get_posts', 'exclude_category');

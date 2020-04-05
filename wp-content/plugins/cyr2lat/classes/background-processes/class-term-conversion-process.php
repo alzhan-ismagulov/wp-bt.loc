@@ -33,7 +33,7 @@ class Term_Conversion_Process extends Conversion_Process {
 	 *
 	 * @var string
 	 */
-	protected $action = CYR_TO_LAT_TERM_CONVERSION_ACTION;
+	protected $action;
 
 	/**
 	 * Term_Conversion_Process constructor.
@@ -42,6 +42,8 @@ class Term_Conversion_Process extends Conversion_Process {
 	 */
 	public function __construct( $main ) {
 		parent::__construct( $main );
+
+		$this->action = constant( 'CYR_TO_LAT_TERM_CONVERSION_ACTION' );
 		$this->locale = get_locale();
 	}
 
@@ -59,15 +61,14 @@ class Term_Conversion_Process extends Conversion_Process {
 		$slug       = urldecode( $term->slug );
 
 		add_filter( 'locale', [ $this, 'filter_term_locale' ] );
-		$sanitized_slug = sanitize_title( $slug );
+		$transliterated_slug = $this->main->transliterate( $slug );
 		remove_filter( 'locale', [ $this, 'filter_term_locale' ] );
 
-		if ( urldecode( $sanitized_slug ) !== $slug ) {
-			// phpcs:disable WordPress.DB.DirectDatabaseQuery
-			$wpdb->update( $wpdb->terms, [ 'slug' => $sanitized_slug ], [ 'term_id' => $term->term_id ] );
-			// phpcs:enable
+		if ( $transliterated_slug !== $slug ) {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery
+			$wpdb->update( $wpdb->terms, [ 'slug' => rawurlencode( $transliterated_slug ) ], [ 'term_id' => $term->term_id ] );
 
-			$this->log( __( 'Term slug converted:', 'cyr2lat' ) . ' ' . $slug . ' => ' . urldecode( $sanitized_slug ) );
+			$this->log( __( 'Term slug converted:', 'cyr2lat' ) . ' ' . $slug . ' => ' . $transliterated_slug );
 		}
 
 		return false;
